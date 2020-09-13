@@ -8,6 +8,7 @@ import spaces from '@/spaces';
 import store from '@/store';
 import abi from '@/helpers/abi';
 import config from '@/helpers/config';
+import { getBalance } from '@/helpers/web3';
 import wsProvider from '@/helpers/ws';
 import rpcProvider from '@/helpers/rpc';
 
@@ -129,6 +130,9 @@ const mutations = {
   SIGN_MESSAGE_FAILURE(_state, payload) {
     console.debug('SIGN_MESSAGE_FAILURE', payload);
   },
+  GET_BALANCES_SUCCESS(_state, payload) {
+    Vue.set(_state, 'balances', payload);
+  },
   GET_BLOCK_REQUEST() {
     console.debug('GET_BLOCK_REQUEST');
   },
@@ -163,6 +167,7 @@ const actions = {
     try {
       await dispatch('loadProvider');
       await dispatch('lookupAddress');
+      await dispatch('getBalances');
       commit('LOAD_WEB3_SUCCESS');
       if (!state.injectedLoaded || state.injectedChainId !== config.chainId) {
         await dispatch('loadBackupProvider');
@@ -259,6 +264,22 @@ const actions = {
       commit('RESOLVE_NAME_FAILURE', e);
       return Promise.reject();
     }
+  },
+  getBalances: async ({ commit, state }) => {
+    const spacesList = Object.values(spaces);
+
+    const balances = await Promise.all(
+      spacesList.map(space => getBalance(web3, space.token, state.account))
+    );
+
+    const balancesMap = spacesList.reduce((acc, space, i) => {
+      return {
+        ...acc,
+        [space.key]: balances[i]
+      };
+    }, {});
+
+    commit('GET_BALANCES_SUCCESS', balancesMap);
   },
   sendTransaction: async (
     { commit },

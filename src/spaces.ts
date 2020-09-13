@@ -11,6 +11,20 @@ const requireSkin = require.context(
 
 requireSkin.keys().map(file => requireSkin(file));
 
+type Space = {
+  key: string;
+  symbol: string;
+  name: string;
+  defaultView: string;
+  address: string;
+  token: string;
+  core: string[];
+  min: number;
+  invalid: any;
+  showOnlyCore: boolean;
+  strategies: any[];
+};
+
 export default Object.fromEntries(
   requireSpace
     .keys()
@@ -22,6 +36,7 @@ export default Object.fromEntries(
     )
     .map(file => {
       const space = requireSpace(file);
+
       return [space.key, space];
     })
-);
+) as Record<string, Space>;
