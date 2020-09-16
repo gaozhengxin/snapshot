@@ -1,7 +1,7 @@
 {
   "env": "master",
   "network": "homestead",
-  "chainId": 1,
+  "chainId": 46688,
   "connectors": {
     "injected": {
       "id": "injected",
