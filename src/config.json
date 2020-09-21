@@ -1,6 +1,6 @@
 {
-  "env": "master",
-  "network": "homestead",
+  "env": "fusion",
+  "network": "testnet",
   "chainId": 46688,
   "connectors": {
     "injected": {
@@ -27,7 +27,7 @@
       "name": "WalletConnect",
       "options": {
         "rpc": {
-          "1": "https://eth-mainnet.alchemyapi.io/v2/rXKbp7PTFm6hcrxU8NL-JGp5RMfRHDwg"
+          "46688": "https://testnet.anyswap.exchange/"
         }
       }
     },
@@ -37,8 +37,8 @@
       "options": {
         "appName": "Snapshot",
         "darkMode": false,
-        "chainId": 1,
-        "ethJsonrpcUrl": "https://eth-mainnet.alchemyapi.io/v2/rXKbp7PTFm6hcrxU8NL-JGp5RMfRHDwg"
+        "chainId": 46688,
+        "ethJsonrpcUrl": "https://testnet.anyswap.exchange/"
       }
     }
   }
