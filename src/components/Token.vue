@@ -19,7 +19,7 @@ export default {
           ? 'space'
           : `logo${this.symbolIndex}`
         : 'logo';
-      return `https://raw.githubusercontent.com/gaozhengxin/snapshot-spaces/fusiontest/spaces/${this.space}/${file}.png`;
+      return `https://raw.githubusercontent.com/gaozhengxin/snapshot-spaces/fusion/spaces/${this.space}/${file}.png`;
     }
   }
 };

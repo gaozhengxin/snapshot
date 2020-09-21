@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@bonustrack/lock": "github:bonustrack/lock#e1437a340b578a1e5a48f37f935578ecdb8b51c8",
-    "@gaozhengxin/snapshot.js": "github:gaozhengxin/snapshot.js#fusiontest",
+    "@gaozhengxin/snapshot.js": "github:gaozhengxin/snapshot.js#fusion",
     "@ethersproject/abi": "^5.0.1",
     "@ethersproject/address": "^5.0.1",
     "@ethersproject/constants": "^5.0.1",
@@ -18,7 +18,7 @@
     "@ethersproject/providers": "^5.0.4",
     "@ethersproject/units": "^5.0.1",
     "@ethersproject/wallet": "^5.0.1",
-    "@gaozhengxin/snapshot-spaces": "github:gaozhengxin/snapshot-spaces#fusiontest",
+    "@gaozhengxin/snapshot-spaces": "github:gaozhengxin/snapshot-spaces#fusion",
     "@portis/web3": "2.0.0-beta.49",
     "@primer/css": "^14.4.0",
     "@vue/cli-plugin-babel": "^4.4.0",

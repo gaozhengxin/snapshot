@@ -1,7 +1,7 @@
 {
   "env": "fusion",
-  "network": "testnet",
-  "chainId": 46688,
+  "network": "mainnet",
+  "chainId": 32659,
   "connectors": {
     "injected": {
       "id": "injected",
@@ -27,7 +27,7 @@
       "name": "WalletConnect",
       "options": {
         "rpc": {
-          "46688": "https://testnet.anyswap.exchange/"
+          "32659": "https://mainnet.anyswap.exchange/"
         }
       }
     },
@@ -37,8 +37,8 @@
       "options": {
         "appName": "Snapshot",
         "darkMode": false,
-        "chainId": 46688,
-        "ethJsonrpcUrl": "https://testnet.anyswap.exchange/"
+        "chainId": 32659,
+        "ethJsonrpcUrl": "https://mainnet.anyswap.exchange/"
       }
     }
   }
