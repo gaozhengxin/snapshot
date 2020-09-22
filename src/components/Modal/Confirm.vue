@@ -15,11 +15,11 @@
         <div class="d-flex">
           <span v-text="'Snapshot'" class="flex-auto text-gray mr-1" />
           <a
-            :href="_etherscanLink(proposal.msg.payload.snapshot, 'block')"
+            :href="_etherscanLink(proposal.msg.payload.snapshot, 'blocks')"
             target="_blank"
             class="float-right"
           >
-            {{ $n(proposal.msg.payload.snapshot) }}
+            {{ $n(proposal.msg.payload.snapshot)}} 
             <Icon name="external-link" class="ml-1" />
           </a>
         </div>

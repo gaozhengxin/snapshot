@@ -22,7 +22,8 @@ export function clone(item) {
 
 export function etherscanLink(str: string, type = 'address'): string {
   const network = config.network === 'homestead' ? '' : `${config.network}.`;
-  return `https://${network}etherscan.io/${type}/${str}`;
+  //return `https://${network}fsnex.com/${type}/${str}`;
+  return `https://fsnex.com/${type}/${str}`;
 }
 
 export function lsSet(key: string, value: any) {
@@ -54,8 +55,8 @@ export function formatProposal(proposal) {
     proposal.msg.payload.metadata = {};
   }
 
-  if (proposal.msg.payload.snapshot < 10000000)
-    proposal.msg.payload.snapshot = 20000000;
+//  if (proposal.msg.payload.snapshot < 10000000)
+//    proposal.msg.payload.snapshot = 20000000;
 
   return proposal;
 }
