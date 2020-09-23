@@ -27,7 +27,7 @@
           </div>
         </Block>
       </router-link>
-      <a href="https://discord.gg/34hT9b" target="_blank">
+      <a href="https://discord.gg/QnKHKq3" target="_blank">
         <Block class="text-center">
           <div
             v-text="'+'"
