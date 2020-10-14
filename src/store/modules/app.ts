@@ -71,7 +71,7 @@ const actions = {
     if (connector) {
       await dispatch('login', connector);
     } else {
-      commit('HANDLE_CHAIN_CHANGED', 1);
+      commit('HANDLE_CHAIN_CHANGED', 32659);
     }
     const init = await Promise.all([
       dispatch('getSpaces'),
@@ -88,7 +88,7 @@ const actions = {
     if (config.env !== 'master') {
       try {
         const namespace = registry[0];
-        const content = await resolveContent(getProvider(1), namespace);
+        const content = await resolveContent(getProvider(32659), namespace);
         const space = await fetch(
           `https://ipfs.fleek.co/ipns/${content.decoded}`
         ).then(res => res.json());

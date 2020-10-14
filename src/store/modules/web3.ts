@@ -19,7 +19,7 @@ const state = {
   account: null,
   name: null,
   blockNumber: 0,
-  network: config.networks['1']
+  network: config.networks['32659']
 };
 
 const mutations = {
@@ -62,7 +62,7 @@ const actions = {
       auth.web3 = new Web3Provider(auth.provider);
       await dispatch('loadProvider');
     } else {
-      commit('HANDLE_CHAIN_CHANGED', 1);
+      commit('HANDLE_CHAIN_CHANGED', 32659);
     }
   },
   logout: async ({ commit }) => {
@@ -93,7 +93,7 @@ const actions = {
       ]);
       commit('HANDLE_CHAIN_CHANGED', network.chainId);
       const account = accounts.length > 0 ? accounts[0] : null;
-      const name = await getProvider(1).lookupAddress(account);
+      const name = await getProvider(32659).lookupAddress(account);
       commit('LOAD_PROVIDER_SUCCESS', {
         account,
         name
