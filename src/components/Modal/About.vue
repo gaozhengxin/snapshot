@@ -29,12 +29,12 @@
       </div>
       <div class="d-flex">
         <span v-text="'Network'" class="flex-auto text-gray mr-1" />
-        {{ config.network === 'homestead' ? 'mainnet' : config.network }}
+        {{ web3.network.network }} ({{ web3.network.chainId }})
       </div>
       <div class="d-flex">
         <span v-text="'Block number'" class="flex-auto text-gray mr-1" />
         <a
-          :href="_etherscanLink(web3.blockNumber, 'blocks')"
+          :href="_explorer(web3.blockNumber, 'block')"
           target="_blank"
           class="float-right"
         >

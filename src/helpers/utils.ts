@@ -1,4 +1,3 @@
-import config from '@/helpers/config';
 import pkg from '@/../package.json';
 
 export function shorten(str = '') {
@@ -18,12 +17,6 @@ export function jsonParse(input, fallback?) {
 
 export function clone(item) {
   return JSON.parse(JSON.stringify(item));
-}
-
-export function etherscanLink(str: string, type = 'address'): string {
-  const network = config.network === 'homestead' ? '' : `${config.network}.`;
-  //return `https://${network}fsnex.com/${type}/${str}`;
-  return `https://fsnex.com/${type}/${str}`;
 }
 
 export function lsSet(key: string, value: any) {

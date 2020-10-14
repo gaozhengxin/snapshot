@@ -41,11 +41,28 @@
             <UiButton
               v-for="(choice, i) in payload.choices"
               :key="i"
-              v-text="choice"
               @click="selectedChoice = i + 1"
               class="d-block width-full mb-2"
               :class="selectedChoice === i + 1 && 'button--active'"
-            />
+            >
+              {{ choice }}
+              <a
+                v-if="_get(payload, `metadata.plugins.aragon.choice${i + 1}`)"
+                @click="modalOpen = true"
+                :aria-label="
+                  `Target address: ${
+                    payload.metadata.plugins.aragon[`choice${i + 1}`].actions[0]
+                      .targetAddress
+                  }\nCalldata: ${
+                    payload.metadata.plugins.aragon[`choice${i + 1}`].actions[0]
+                      .calldata
+                  }`
+                "
+                class="tooltipped tooltipped-n break-word"
+              >
+                <Icon name="warning" class="v-align-middle ml-1" />
+              </a>
+            </UiButton>
           </div>
           <UiButton
             :disabled="voteLoading || !selectedChoice || !web3.account"
@@ -64,10 +81,13 @@
         />
       </div>
       <div v-if="loaded" class="col-12 col-lg-4 float-left">
-        <Block title="Informations">
+        <Block title="Information">
           <div class="mb-1 overflow-hidden">
             <b>Token(s)</b>
-            <span class="float-right text-white">
+            <a
+              @click="modalStrategiesOpen = true"
+              class="float-right text-white"
+            >
               <span v-for="(symbol, symbolIndex) of symbols" :key="symbol">
                 <Token :space="space.key" :symbolIndex="symbolIndex" />
                 {{ symbol }}
@@ -77,7 +97,7 @@
                   class="mr-1"
                 />
               </span>
-            </span>
+            </a>
           </div>
           <div class="mb-1">
             <b>Author</b>
@@ -102,23 +122,23 @@
             <div class="mb-1">
               <b>Start date</b>
               <span
-                :title="_ms(payload.start)"
+                :aria-label="_ms(payload.start)"
                 v-text="$d(payload.start * 1e3, 'short')"
-                class="float-right text-white"
+                class="float-right text-white tooltipped tooltipped-n"
               />
             </div>
             <div class="mb-1">
               <b>End date</b>
               <span
-                :title="_ms(payload.end)"
+                :aria-label="_ms(payload.end)"
                 v-text="$d(payload.end * 1e3, 'short')"
-                class="float-right text-white"
+                class="float-right text-white tooltipped tooltipped-n"
               />
             </div>
             <div class="mb-1">
               <b>Snapshot</b>
               <a
-                :href="_etherscanLink(payload.snapshot, 'blocks')"
+                :href="_explorer(payload.snapshot, 'block')"
                 target="_blank"
                 class="float-right"
               >
@@ -129,6 +149,7 @@
           </div>
         </Block>
         <BlockResults
+          :id="id"
           :space="space"
           :payload="payload"
           :results="results"
@@ -149,12 +170,16 @@
       :scores="scores"
       :snapshot="payload.snapshot"
     />
+    <ModalStrategies
+      :open="modalStrategiesOpen"
+      @close="modalStrategiesOpen = false"
+      :strategies="space.strategies"
+    />
   </Container>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import spaces from '@/spaces';
 
 export default {
   data() {
@@ -168,6 +193,7 @@ export default {
       votes: {},
       results: [],
       modalOpen: false,
+      modalStrategiesOpen: false,
       selectedChoice: 0,
       totalScore: 0,
       scores: []
@@ -175,9 +201,7 @@ export default {
   },
   computed: {
     space() {
-      return spaces[this.key]
-        ? spaces[this.key]
-        : { token: this.key, verified: [] };
+      return this.app.spaces[this.key];
     },
     payload() {
       return this.proposal.msg.payload;
@@ -188,6 +212,11 @@ export default {
     symbols() {
       if (!this.space.strategies) return [this.space.symbol];
       return this.space.strategies.map(strategy => strategy[1].symbol);
+    }
+  },
+  watch: {
+    'web3.account': async function(val, prev) {
+      if (val && val.toLowerCase() !== prev) await this.loadPower();
     }
   },
   methods: {
