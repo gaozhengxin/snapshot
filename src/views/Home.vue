@@ -10,7 +10,7 @@
         <div class="ml-3 text-right hide-sm">
           {{ _numeral(spaces.length) }} space(s)
           <a
-            href="https://discord.snapshot.page"
+            href="https://t.me/anyswap"
             target="_blank"
             class="hide-md ml-3"
           >
@@ -55,7 +55,7 @@
           </div>
       </router-link>
       </div>
-      <a href="https://t.me/anyswap" target="_blank">
+      <!--<a href="https://t.me/anyswap" target="_blank">
         <Block class="text-center">
           <div
             v-text="'+'"
@@ -64,7 +64,7 @@
           />
           <h2 v-text="'Create space'" />
         </Block>
-      </a>
+      </a>-->
     </Container>
   </div>
 </template>
