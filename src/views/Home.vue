@@ -55,16 +55,6 @@
           </div>
       </router-link>
       </div>
-      <!--<a href="https://t.me/anyswap" target="_blank">
-        <Block class="text-center">
-          <div
-            v-text="'+'"
-            style="width: 88px; height: 88px; color: white; font-size: 76px; padding-top: 2px;"
-            class="bg-gray-3 circle mx-auto mb-3"
-          />
-          <h2 v-text="'Create space'" />
-        </Block>
-      </a>-->
     </Container>
   </div>
 </template>
