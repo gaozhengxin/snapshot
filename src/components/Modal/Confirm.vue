@@ -15,7 +15,7 @@
         <div class="d-flex">
           <span v-text="'Snapshot'" class="flex-auto text-gray mr-1" />
           <a
-            :href="_explorer(proposal.msg.payload.snapshot, 'block')"
+            :href="_explorer(proposal.msg.payload.snapshot, 'blocks')"
             target="_blank"
             class="float-right"
           >
