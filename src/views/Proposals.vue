@@ -109,10 +109,9 @@ export default {
               ['core', 'all'].includes(this.selectedState) &&
               core.includes(author) &&
               !this.space.invalid.includes(proposal[1].authorIpfsHash)
-            )
-              return true;
+            )  return true;
 
-            if (proposal[1].score < this.space.min) return false;
+            // if (proposal[1].score < this.space.min)  return false;
 
             if (
               this.selectedState === 'all' ||

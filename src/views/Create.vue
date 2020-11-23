@@ -98,6 +98,13 @@
           >
             Publish
           </UiButton>
+          <div
+          v-if="hasChecked && !isEnough"
+          >
+            You do not have enough score to create a proposal.<br/>
+            Your score: {{this.score}} .
+            {{this.space.name}} minimal score: {{this.space.min}}.
+          </div>
         </Block>
       </div>
     </div>
@@ -143,7 +150,10 @@ export default {
       modalOpen: false,
       modalPluginsOpen: false,
       selectedDate: '',
-      counter: 0
+      counter: 0,
+      hasChecked: false,
+      isEnough: false,
+      score: 0,
     };
   },
   computed: {
@@ -163,20 +173,38 @@ export default {
         this.form.end > this.form.start &&
         this.form.snapshot &&
         this.choices.length >= 2 &&
-        !this.choices.some(a => a.text === '')
-      );
+        !this.choices.some(a => a.text === '') &&
+        this.isEnough
+      );      
     }
   },
   mounted() {
     this.addChoice(2);
+    this.checkScore();
   },
   methods: {
-    ...mapActions(['send']),
+    ...mapActions(['send',"getCurrentPower"]),
     addChoice(num) {
       for (let i = 1; i <= num; i++) {
         this.counter++;
         this.choices.push({ key: this.counter, text: '' });
       }
+    },
+    async checkScore() {
+      if (!this.web3.account) return;
+      const score = await this.getCurrentPower({
+        space: this.space,
+        address: this.web3.account
+      });
+      this.hasChecked = true;
+      this.score = score;
+      console.log('checkScore: ' + score);
+      if (score >= this.space.min) {
+        this.isEnough = true;
+      } else {
+        this.isEnough = false;
+      }
+      return score;
     },
     removeChoice(i) {
       this.choices.splice(i, 1);
@@ -187,10 +215,14 @@ export default {
       }
     },
     async handleSubmit() {
+      if (!this.isEnough) {
+       alert('You do not have enough score to create a proposal. Your score:' + this.score + '. ' + this.space.name + 'minimal score: ' + this.space.min + '.');
+       return;
+      }
       this.loading = true;
       this.form.choices = this.choices.map(choice => choice.text);
       try {
-        const { ipfsHash } = await this.send({
+          const { ipfsHash } = await this.send({
           token: this.space.token,
           type: 'proposal',
           payload: this.form

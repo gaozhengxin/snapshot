@@ -145,10 +145,10 @@ const actions = {
         );
         proposals = Object.fromEntries(
           Object.entries(proposals).map((proposal: any) => {
-            proposal[1].score = scores.reduce(
+            /*proposal[1].score = scores.reduce(
               (a, b) => a + b[proposal[1].address],
               0
-            );
+            );*/
             return [proposal[0], proposal[1]];
           })
         );
@@ -245,6 +245,24 @@ const actions = {
         scores,
         totalScore: scores.reduce((a, b: any) => a + b, 0)
       };
+    } catch (e) {
+      commit('GET_POWER_FAILURE', e);
+    }
+  },
+  getCurrentPower: async ({ commit, rootState }, { space, address, snapshot }) => {
+    commit('GET_POWER_REQUEST');
+    try {
+      const blockTag = 'latest';
+      let scores: any = await getScores(
+        space.strategies,
+        space.chainId,
+        getProvider(space.chainId),
+        [address],
+        // @ts-ignore
+        blockTag
+      );
+      commit('GET_POWER_SUCCESS');
+      return scores[0][address];
     } catch (e) {
       commit('GET_POWER_FAILURE', e);
     }
