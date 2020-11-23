@@ -220,7 +220,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getProposal', 'getPower']),
+    ...mapActions(['getProposal', 'getPower', 'getProposalBasic']),
+    async loadProposalBasic() {
+      const proposalObj = await this.getProposalBasic({
+        space: this.space,
+        id: this.id
+      });
+      this.proposal = proposalObj.proposal;
+      this.votes = proposalObj.votes;
+      this.results = proposalObj.results;
+    },
     async loadProposal() {
       const proposalObj = await this.getProposal({
         space: this.space,
@@ -241,10 +250,15 @@ export default {
       this.scores = scores;
     }
   },
-  async created() {
-    this.loading = true;
+  async mounted() {
     await this.loadProposal();
     await this.loadPower();
+  },
+  async created() {
+    this.loading = true;
+    await this.loadProposalBasic();
+    // await this.loadProposal();
+    // await this.loadPower();
     this.loading = false;
     this.loaded = true;
   }

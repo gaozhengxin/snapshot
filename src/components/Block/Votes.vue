@@ -20,9 +20,7 @@
         <span
           class="tooltipped tooltipped-n"
           :aria-label="
-            vote.scores
-              .map((score, index) => `${_numeral(score)} ${titles[index]}`)
-              .join(' + ')
+            scores
           "
         >
           {{ `${_numeral(vote.balance)} ${_shorten(space.symbol, 'symbol')}` }}
@@ -61,8 +59,17 @@ export default {
       showAllVotes: false,
       authorIpfsHash: '',
       relayerIpfsHash: '',
-      modalReceiptOpen: false
+      modalReceiptOpen: false,
+      scores: []
     };
+  },
+  mounted() {
+    if (!this.vote.scores) {
+      return [];
+    }
+    return this.vote.scores
+              .map((score, index) => `${_numeral(score)} ${titles[index]}`)
+              .join(' + ')
   },
   computed: {
     visibleVotes() {

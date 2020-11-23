@@ -53,6 +53,15 @@ const mutations = {
   GET_PROPOSAL_FAILURE(_state, payload) {
     console.debug('GET_PROPOSAL_FAILURE', payload);
   },
+  GET_PROPOSALBASIC_REQUEST() {
+    console.debug('GET_PROPOSALBASIC_REQUEST');
+  },
+  GET_PROPOSALBASIC_SUCCESS() {
+    console.debug('GET_PROPOSALBASIC_SUCCESS');
+  },
+  GET_PROPOSALBASIC_FAILURE(_state, payload) {
+    console.debug('GET_PROPOSALBASIC_FAILURE', payload);
+  },
   GET_POWER_REQUEST() {
     console.debug('GET_POWER_REQUEST');
   },
@@ -135,8 +144,8 @@ const actions = {
   getProposals: async ({ commit }, space) => {
     commit('GET_PROPOSALS_REQUEST');
     try {
-      let proposals: any = await client.request(`${space.token}/proposals`);
-      if (proposals) {
+      const proposals: any = await client.request(`${space.token}/proposals`);
+      /*if (proposals) {
         const scores: any = await getScores(
           space.strategies,
           space.chainId,
@@ -145,18 +154,44 @@ const actions = {
         );
         proposals = Object.fromEntries(
           Object.entries(proposals).map((proposal: any) => {
-            /*proposal[1].score = scores.reduce(
+            proposal[1].score = scores.reduce(
               (a, b) => a + b[proposal[1].address],
               0
-            );*/
+            );
             return [proposal[0], proposal[1]];
           })
         );
-      }
+      }*/
       commit('GET_PROPOSALS_SUCCESS');
       return formatProposals(proposals);
     } catch (e) {
       commit('GET_PROPOSALS_FAILURE', e);
+    }
+  },
+  getProposalBasic: async ({ commit, rootState }, payload) => {
+    commit('GET_PROPOSALBASIC_REQUEST');
+    try {
+      const result: any = {};
+      const [proposal, votes] = await Promise.all([
+        ipfs.get(payload.id),
+        client.request(`${payload.space.token}/proposal/${payload.id}`)
+      ]);
+      result.proposal = formatProposal(proposal);
+      result.proposal.ipfsHash = payload.id;
+      result.votes = votes;
+      result.totalVotes = result.proposal.msg.payload.choices.map(
+        (choice, i) =>
+          Object.values(result.votes).filter(
+            (vote: any) => vote.msg.payload.choice === i + 1
+          ).length
+      );
+      result.totalBalances = 0;
+      result.totalScores = 0;
+      result.totalVotesBalances = 0;
+      commit('GET_PROPOSALBASIC_SUCCESS');
+      return result;
+    } catch (e) {
+      commit('GET_PROPOSAL_FAILURE', e);
     }
   },
   getProposal: async ({ commit, rootState }, payload) => {
@@ -253,7 +288,7 @@ const actions = {
     commit('GET_POWER_REQUEST');
     try {
       const blockTag = 'latest';
-      let scores: any = await getScores(
+      const scores: any = await getScores(
         space.strategies,
         space.chainId,
         getProvider(space.chainId),
