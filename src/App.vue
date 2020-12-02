@@ -13,13 +13,20 @@
 
 <script>
 import { mapActions } from 'vuex';
+import ipfs from '@/helpers/ipfs';
 
 export default {
   methods: {
-    ...mapActions(['init'])
+    ...mapActions(['init']),
   },
   mounted() {
     this.init();
+    this.$cookies.config('30d');
+    console.log("======== this.$cookies.get('IPFSGATEWAY') ========" + this.$cookies.get('IPFSGATEWAY'))
+    if (!this.$cookies.get('IPFSGATEWAY')) {
+      this.$cookies.set('IPFSGATEWAY', process.env.VUE_APP_IPFS_NODE);
+    }
+    ipfs.setGateway(this.$cookies.get('IPFSGATEWAY'));
   },
   computed: {
     space() {
@@ -28,7 +35,7 @@ export default {
       } catch (e) {
         return {};
       }
-    }
-  }
+    },
+  },
 };
 </script>

@@ -13,6 +13,8 @@ import { getBlockNumber, resolveContent, signMessage } from '@/helpers/web3';
 import registry from '@/helpers/registry.json';
 import { version } from '@/../package.json';
 import config from '@/helpers/config';
+import VueCookies from 'vue-cookies';
+Vue.use(VueCookies);
 
 const state = {
   init: false,
@@ -301,7 +303,7 @@ const actions = {
     } catch (e) {
       commit('GET_POWER_FAILURE', e);
     }
-  }
+  },
 };
 
 export default {

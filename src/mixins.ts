@@ -5,6 +5,7 @@ import prettyMs from 'pretty-ms';
 import store from '@/store';
 import config from '@/helpers/config';
 import { shorten } from '@/helpers/utils';
+import ipfs from '@/helpers/ipfs';
 
 // @ts-ignore
 const modules = Object.entries(store.state).map(module => module[0]);
@@ -40,7 +41,7 @@ export default {
       return shorten(str);
     },
     _ipfsUrl(ipfsHash: string): string {
-      return `https://${process.env.VUE_APP_IPFS_NODE}/ipfs/${ipfsHash}`;
+      return `https://${ipfs.getGateway()}/ipfs/${ipfsHash}`;
     },
     _explorer(str: string, type = 'address'): string {
       // @ts-ignore

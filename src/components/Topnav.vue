@@ -3,18 +3,18 @@
     <div
       v-if="config.env === 'develop'"
       class="p-3 text-center bg-blue"
-      style="color: white; font-size: 20px;"
+      style="color: white; font-size: 20px"
     >
       This is the demo site, give it a try!
     </div>
     <nav id="topnav" class="border-bottom width-full bg-black">
       <Container>
-        <div class="d-flex flex-items-center" style="height: 78px;">
+        <div class="d-flex flex-items-center" style="height: 78px">
           <div class="flex-auto d-flex flex-items-center">
             <router-link
               :to="{ name: 'home' }"
               class="d-inline-block d-flex flex-items-center"
-              style="font-size: 24px; padding-top: 4px;"
+              style="font-size: 24px; padding-top: 4px"
             >
               <span
                 :class="space && 'hide-sm'"
@@ -27,7 +27,7 @@
               v-if="space"
               :to="{ name: 'proposals' }"
               class="d-inline-block d-flex flex-items-center"
-              style="font-size: 24px; padding-top: 4px;"
+              style="font-size: 24px; padding-top: 4px"
             >
               <Token :space="space.key" symbolIndex="space" size="28" />
               <span class="ml-2" v-text="space.name" />
@@ -61,6 +61,9 @@
               <span v-text="'?'" class="ml-n1 mr-n1" />
             </UiButton>
             -->
+            <UiButton type="primary" @click="modalIPFSOpen = true">
+              IPFS gateway
+            </UiButton>
           </div>
         </div>
         <ModalAccount
@@ -69,6 +72,13 @@
           @login="handleLogin"
         />
         <ModalAbout :open="modalAboutOpen" @close="modalAboutOpen = false" />
+        <ModalAbout
+          :open="modalIPFSOpen"
+          @close="modalIPFSOpen = false"
+          title="IPFS gateway"
+          @ok="handleSetIPFSGateway"
+        >
+        </ModalAbout>
       </Container>
     </nav>
   </Sticky>
@@ -82,7 +92,9 @@ export default {
     return {
       loading: false,
       modalOpen: false,
-      modalAboutOpen: false
+      modalAboutOpen: false,
+      modalIPFSOpen: false,
+      ipfsgateway: '',
     };
   },
   computed: {
@@ -90,16 +102,16 @@ export default {
       return this.$route.params.key
         ? this.app.spaces[this.$route.params.key]
         : false;
-    }
+    },
   },
   methods: {
-    ...mapActions(['login']),
+    ...mapActions(['login', 'setIPFSGateway', 'getIPFSGateway']),
     async handleLogin(connector) {
       this.modalOpen = false;
       this.loading = true;
       await this.login(connector);
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>

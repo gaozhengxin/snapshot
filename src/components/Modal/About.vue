@@ -1,5 +1,6 @@
 <template>
   <UiModal :open="open" @close="$emit('close')">
+    <!--
     <h3 class="m-4 text-center">About</h3>
     <div class="text-center">
       <a href="https://twitter.com/SnapshotLabs" target="_blank">
@@ -44,6 +45,20 @@
       </div>
       <div class="d-flex">
         <span v-text="'IPFS server'" class="flex-auto text-gray mr-1" />
+        <span class="hide-sm"
+          ><input
+            type="text"
+            :placeholder="ipfsgateway"
+            v-model="inputVal"
+            v-on:input="handleSetIPFSGateway"
+            value=""
+        /></span>
+        <UiButton
+          @click="handleSetIPFSGateway"
+          class="button-outline width-full mb-2"
+        >
+          Switch
+        </UiButton>
         {{ ipfsNode }}
       </div>
       <div class="d-flex">
@@ -51,11 +66,43 @@
         {{ hubUrl }}
       </div>
     </div>
+    -->
+    <h3 class="m-4 text-center">IPFS gateway</h3>
+    <div class="text-center">
+      <div class="d-flex">
+        <span class="hide-sm"
+          ><input
+            type="text"
+            :placeholder="ipfsNode"
+            v-model="inputVal"
+            value="ipfsNode"
+            ref="ipfsgateway"
+        /></span>
+      </div>
+      <div class="d-flex">
+        <UiButton @click="handleSetIPFSGateway" class="button-outline mb-2">
+          Apply
+        </UiButton>
+        <!--{{ ipfsNode }}-->
+        <a
+          href="https://ipfs.github.io/public-gateway-checker"
+          target="_blank"
+          class="mb-2 d-block"
+        >
+          <UiButton class="button-outline width-flex">
+            Check public gateways
+            <Icon name="external-link" class="ml-1" />
+          </UiButton>
+        </a>
+      </div>
+    </div>
   </UiModal>
 </template>
 
 <script>
 import pkg from '@/../package.json';
+import { mapActions } from 'vuex';
+import ipfs from '@/helpers/ipfs';
 
 export default {
   props: ['open'],
@@ -63,8 +110,22 @@ export default {
     return {
       pkg,
       hubUrl: process.env.VUE_APP_HUB_URL,
-      ipfsNode: process.env.VUE_APP_IPFS_NODE
+      ipfsNode: this.$cookies.get('IPFSGATEWAY'),
     };
-  }
+  },
+  methods: {
+    ...mapActions(['login', 'setIPFSGateway', 'getIPFSGateway']),
+    handleSetIPFSGateway() {
+      const gateway = this.$refs.ipfsgateway.value;
+      ipfs.setGateway(gateway);
+      this.$cookies.set('IPFSGATEWAY', gateway);
+      this.$emit('close');
+    },
+  },
+  async mounted() {
+    await ipfs.getGateway().then((res) => {
+      this.ipfsNode = res;
+    });
+  },
 };
 </script>
